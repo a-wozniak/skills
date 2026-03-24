@@ -40,6 +40,8 @@ If `uip` is not found, install it with `npm install -g @uipath/cli`. If `npm` is
 
 **Do NOT add `--format json` to forwarded commands.** The `--format` flag is only valid for native `uip` commands (like `uip login`, `uip codedagents setup`). Commands forwarded to the Python CLI (`new`, `init`, `run`, `eval`, `deploy`, `push`, `pull`, `pack`, `publish`, `invoke`) do **not** accept `--format json`.
 
+**Why `uip codedagents` for low-code agents?** The name `codedagents` is historical — these commands are thin wrappers that forward to the `uipath` Python CLI, which auto-detects the agent type at runtime. Using `uip codedagents run agent.json '...'` works for low-code agents because the Python CLI sees `agent.json` and routes to the low-code runtime. You can also use `uipath run agent.json '...'` directly if you prefer.
+
 ## Critical Rules (Both Agent Types)
 
 - **NEVER run `uip login` without `--tenant`.** The interactive tenant picker does not work from Claude's Bash tool. Always ask the user for environment, organization, and tenant name first.
@@ -60,7 +62,7 @@ If `uip` is not found, install it with `npm install -g @uipath/cli`. If `npm` is
 - **No `pyproject.toml` needed.** Low-code agents don't use Python packaging.
 - **No framework selection.** Low-code uses UiPath's built-in ReAct engine (powered by LangGraph under the hood).
 - **The entrypoint is always `agent.json`.** Use it in place of `main` or other named entrypoints.
-- **`entry-points.json` is generated automatically.** Studio Web creates it, and `uip codedagents init` regenerates it from `agent.json`. Do not hand-edit it.
+- **`entry-points.json` is generated automatically.** Studio Web creates it when you pull, and `uip codedagents init` regenerates it from `agent.json`. Required for push/deploy but not for local `run`. Do not hand-edit it.
 - **`bindings.json` is used for resource overrides.** Same format as coded agents — maps logical resource names to actual Orchestrator paths.
 
 ## Lifecycle Stages
@@ -105,7 +107,7 @@ Determine coded vs low-code from context (see Agent Type Detection table above).
 
 1. **Setup** — Create `agent.json` using the template from [assets/templates/agent.json](assets/templates/agent.json) or pull from Studio Web via `uip codedagents pull`. Read the [low-code setup guide](references/lowcode/setup.md).
 2. **Build** — Edit `agent.json`: configure prompts (`messages`), LLM settings (`settings`), input/output schemas, and add resources (tools, contexts, escalations). Read the [agent.json reference](references/lowcode/agent-json-reference.md) and [resources reference](references/lowcode/resources-reference.md).
-3. **Init** — Run `uip codedagents init` to generate `entry-points.json` and `bindings.json` from `agent.json`. This is required before run/deploy.
+3. **Init** — Run `uip codedagents init` to generate `entry-points.json` and `bindings.json` from `agent.json`. Required before push/deploy (optional for local `run`).
 
 ---
 

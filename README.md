@@ -49,7 +49,7 @@ The repository contains skills for building and managing UiPath automation proje
 | **uipath-rpa-workflows** | Generate and edit RPA workflows (XAML) in UiPath Studio Desktop with discovery-first approach |
 | **uipath-flow** | Create, validate, and debug UiPath Flow projects using the `.flow` JSON format and `uip` CLI |
 | **uipath-platform** | Authentication, Orchestrator management, solution lifecycle, Integration Service, and CLI tools |
-| **uipath-coded-agents** | End-to-end toolkit for UiPath coded agents: scaffold, build, run, evaluate, deploy (LangGraph, LlamaIndex, OpenAI Agents, Simple Function) |
+| **uipath-agents** | End-to-end toolkit for UiPath agents — both coded (Python with LangGraph, LlamaIndex, OpenAI Agents) and low-code (agent.json from Agent Builder): scaffold, build, run, evaluate, deploy |
 | **uipath-coded-apps** | Build, sync, package, publish, and deploy UiPath Coded Web Applications — push/pull to Studio Web, pack into .nupkg, publish to Orchestrator, deploy to production |
 | **uipath-servo** | Desktop and browser UI automation and testing — click, type, read, verify, screenshot, and extract UI elements |
 

@@ -7,15 +7,15 @@ Every resource object has at minimum:
 | Field | Type | Description |
 |---|---|---|
 | `$resourceType` | string | Discriminator: `"tool"`, `"context"`, `"escalation"`, `"mcp"`, or `"a2a"` |
-| `slug` | string | Unique identifier used in prompts and bindings |
-| `name` | string | Human-readable display name |
+| `name` | string | Display name; also used as the tool name the LLM sees |
 | `description` | string | Explains to the LLM what the resource does and when to use it |
+| `isEnabled` | boolean | Whether the resource is active (default `true`) |
 
 ---
 
 ## 1. Tool Resources (`$resourceType: "tool"`)
 
-Tool resources give the agent callable actions. The `toolType` field selects the subtype.
+Tool resources give the agent callable actions. The `type` field selects the subtype.
 
 ---
 
@@ -27,7 +27,7 @@ Calls an **API-triggered UiPath workflow** (an Orchestrator process started via 
 
 | Field | Path | Description |
 |---|---|---|
-| `toolType` | — | `"Api"` |
+| `type` | — | `"Api"` (also: `"Process"`, `"Agent"`, `"Integration"`, `"Internal"`, `"Ixp"`) |
 | `folderPath` | `properties.folderPath` | Orchestrator folder containing the process |
 | `processName` | `properties.processName` | Name of the Orchestrator process |
 | `inputSchema` | — | JSON Schema for the arguments passed to the workflow |
@@ -36,10 +36,14 @@ Calls an **API-triggered UiPath workflow** (an Orchestrator process started via 
 ```json
 {
   "$resourceType": "tool",
-  "toolType": "Api",
-  "slug": "get-customer-data",
+  "type": "Api",
   "name": "Get Customer Data",
   "description": "Retrieves customer account details from the CRM system given a customer ID. Returns name, email, account status, and contract tier.",
+  "isEnabled": true,
+  "location": "solution",
+  "guardrail": { "policies": [] },
+  "settings": {},
+  "argumentProperties": {},
   "properties": {
     "folderPath": "Finance/CRM",
     "processName": "GetCustomerData"
@@ -70,15 +74,19 @@ Calls an **API-triggered UiPath workflow** (an Orchestrator process started via 
 
 ### 1.2 Process — RPA Process Tool
 
-Triggers a **job-based UiPath RPA process** (long-running or robot-executed). The structure is identical to `Api` but uses `toolType: "Process"`. Use this when the automation runs on an unattended robot and may take longer to complete.
+Triggers a **job-based UiPath RPA process** (long-running or robot-executed). The structure is identical to `Api` but uses `type: "Process"`. Use this when the automation runs on an unattended robot and may take longer to complete.
 
 ```json
 {
   "$resourceType": "tool",
-  "toolType": "Process",
-  "slug": "generate-invoice",
+  "type": "Process",
   "name": "Generate Invoice",
   "description": "Runs an RPA process that generates a PDF invoice in the ERP system and returns the document URL. Use this after all invoice line items have been confirmed.",
+  "isEnabled": true,
+  "location": "solution",
+  "guardrail": { "policies": [] },
+  "settings": {},
+  "argumentProperties": {},
   "properties": {
     "folderPath": "Finance/Invoicing",
     "processName": "GenerateInvoicePDF"
@@ -121,10 +129,14 @@ Delegates a sub-task to **another UiPath agent**. The called agent runs independ
 ```json
 {
   "$resourceType": "tool",
-  "toolType": "Agent",
-  "slug": "summarisation-agent",
+  "type": "Agent",
   "name": "Summarisation Agent",
   "description": "Calls a specialised summarisation agent that condenses long documents into structured bullet-point summaries. Use this when the input text exceeds 2000 words.",
+  "isEnabled": true,
+  "location": "solution",
+  "guardrail": { "policies": [] },
+  "settings": {},
+  "argumentProperties": {},
   "properties": {
     "folderPath": "Shared/Agents",
     "processName": "SummarisationAgent"
@@ -166,10 +178,14 @@ Calls an action exposed by an **Integration Service connector** (e.g. Salesforce
 ```json
 {
   "$resourceType": "tool",
-  "toolType": "Integration",
-  "slug": "create-servicenow-ticket",
+  "type": "Integration",
   "name": "Create ServiceNow Incident",
   "description": "Creates a new incident ticket in ServiceNow. Use this when the user requests IT support or when an automated check detects a system issue that requires human follow-up.",
+  "isEnabled": true,
+  "location": "solution",
+  "guardrail": { "policies": [] },
+  "settings": {},
+  "argumentProperties": {},
   "properties": {
     "connectorKey": "ServiceNow",
     "elementInstanceId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -225,10 +241,14 @@ Available built-in tool names:
 ```json
 {
   "$resourceType": "tool",
-  "toolType": "Internal",
-  "slug": "analyze-attachments",
+  "type": "Internal",
   "name": "Analyse Attachments",
   "description": "Extracts text, tables, and structured data from file attachments provided by the user. Use this whenever the user uploads a PDF, Word document, or image that contains information relevant to the task.",
+  "isEnabled": true,
+  "location": "solution",
+  "guardrail": { "policies": [] },
+  "settings": {},
+  "argumentProperties": {},
   "toolName": "analyze-attachments"
 }
 ```
@@ -262,7 +282,6 @@ Context resources provide the agent with **retrieval-augmented knowledge** — d
 ```json
 {
   "$resourceType": "context",
-  "slug": "product-knowledge-base",
   "name": "Product Knowledge Base",
   "description": "Internal product documentation including feature specs, pricing, and FAQs. Query this whenever the user asks about product capabilities, limitations, or pricing.",
   "contextType": "index",
@@ -298,7 +317,6 @@ Escalation resources enable **Human-in-the-Loop (HITL)** workflows. When the age
 ```json
 {
   "$resourceType": "escalation",
-  "slug": "manager-approval",
   "name": "Manager Approval",
   "description": "Escalates to a human manager when the requested action exceeds the agent's authorised scope, involves a value above $10,000, or when the agent confidence is low. The manager can approve, reject, or provide additional instructions.",
   "channel": {
@@ -416,9 +434,9 @@ Resources are listed in the `"resources"` array. The agent's LLM uses the `descr
 ```json
 {
   "resources": [
-    { "$resourceType": "tool",      "toolType": "Api",       "slug": "get-customer-data",    "..." : "..." },
-    { "$resourceType": "context",   "slug": "product-knowledge-base", "..." : "..." },
-    { "$resourceType": "escalation","slug": "manager-approval",       "..." : "..." },
+    { "$resourceType": "tool",      "type": "Api",       "name": "Get Customer Data",    "..." : "..." },
+    { "$resourceType": "context",   "name": "Product Knowledge Base", "..." : "..." },
+    { "$resourceType": "escalation","name": "Manager Approval",       "..." : "..." },
     { "$resourceType": "mcp",       "slug": "github-mcp",             "..." : "..." },
     { "$resourceType": "a2a",       "slug": "legal-review-agent",     "..." : "..." }
   ]

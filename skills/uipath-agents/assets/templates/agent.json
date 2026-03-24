@@ -1,24 +1,32 @@
 {
-  "$schema": "https://cloud.uipath.com/agent-schema/v1.1.0/agent-schema.json",
   "version": "1.1.0",
   "name": "{AGENT_NAME}",
-  "description": "{AGENT_DESCRIPTION}",
-  "engine": "basic-v2",
-  "model": "gpt-4o-2024-11-20",
-  "prompts": {
-    "system": "You are a helpful assistant. Complete the user's task accurately and concisely. If you are missing information required to complete the task, ask a clarifying question before proceeding.",
-    "user": "{{task}}\n\n{{#if context}}Additional context:\n{{context}}{{/if}}"
+  "metadata": {
+    "storageVersion": "44.0.0",
+    "isConversational": false
   },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant. Complete the user's task accurately and concisely. If you are missing information required to complete the task, ask a clarifying question before proceeding.",
+      "contentTokens": [
+        { "type": "simpleText", "rawString": "You are a helpful assistant. Complete the user's task accurately and concisely. If you are missing information required to complete the task, ask a clarifying question before proceeding." }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "{{task}}",
+      "contentTokens": [
+        { "type": "variable", "rawString": "input.task" }
+      ]
+    }
+  ],
   "inputSchema": {
     "type": "object",
     "properties": {
       "task": {
         "type": "string",
         "description": "The task or question for the agent to complete."
-      },
-      "context": {
-        "type": "string",
-        "description": "Optional background information or constraints relevant to the task."
       }
     },
     "required": ["task"]
@@ -30,8 +38,14 @@
         "type": "string",
         "description": "The agent's response or the outcome of the completed task."
       }
-    },
-    "required": ["result"]
+    }
+  },
+  "settings": {
+    "engine": "basic-v2",
+    "model": "gpt-4o-2024-11-20",
+    "maxTokens": 16384,
+    "temperature": 0,
+    "maxIterations": 25
   },
   "resources": [],
   "features": []

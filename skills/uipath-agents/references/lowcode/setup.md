@@ -140,7 +140,7 @@ Running `uip codedagents init` on a low-code project reads `agent.json` and gene
 - **`entry-points.json`** — Mirrors `inputSchema`/`outputSchema` from `agent.json` in the standard entrypoint format used by Orchestrator and Studio Web.
 - **`bindings.json`** — If not already present, creates an empty bindings file.
 
-This step is **optional for local development** (the runtime reads schemas directly from `agent.json`), but **required before push/deploy** so that Orchestrator knows the agent's I/O contract.
+This step is **optional for local `run`** (the runtime reads schemas directly from `agent.json`), but **required before push/deploy** so that Orchestrator and Studio Web know the agent's I/O contract.
 
 ```bash
 uip codedagents init
@@ -222,7 +222,7 @@ Once `agent.json` is in place and `.env` is configured:
 # First-time runtime setup (only needed once)
 uip codedagents setup --format json
 
-# Generate entry-points.json (required before first run if created from scratch)
+# Generate entry-points.json (optional for local run, required before push/deploy)
 uip codedagents init
 
 # Run the agent with a test input
