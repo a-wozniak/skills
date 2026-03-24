@@ -384,7 +384,7 @@ MCP resources connect the agent to an external **Model Context Protocol (MCP) se
 
 ## 5. A2A Resources (`$resourceType: "a2a"`)
 
-A2A resources use the **Agent-to-Agent (A2A) protocol** to connect to agents hosted on external systems (outside UiPath Automation Cloud). Unlike `toolType: "Agent"` which calls UiPath-native agents, A2A uses a standardised HTTP-based protocol with an **Agent Card** that describes the remote agent's capabilities.
+A2A resources use the **Agent-to-Agent (A2A) protocol** to connect to agents hosted on external systems (outside UiPath Automation Cloud). Unlike `type: "Agent"` tool resources which call UiPath-native agents, A2A uses a standardised HTTP-based protocol with an **Agent Card** that describes the remote agent's capabilities.
 
 **Key fields:**
 

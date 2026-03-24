@@ -89,16 +89,29 @@ output = interrupt(WaitJob(job_id=background_job_id))
 
 ### Low-Code Configuration
 
-For low-code agents, add an escalation resource to `agent.json`:
+For low-code agents, add an escalation resource to the `resources` array in `agent.json`. See [lowcode/resources-reference.md](../lowcode/resources-reference.md) for all options.
 
 ```json
 {
-  "resources": [
+  "$resourceType": "escalation",
+  "name": "RequestReview",
+  "description": "Escalate to a human reviewer for approval.",
+  "escalationType": 0,
+  "isAgentMemoryEnabled": false,
+  "channels": [
     {
-      "type": "escalation",
-      "name": "RequestReview",
-      "appName": "RequestReview",
-      "appFolderPath": "MyFolderPath"
+      "name": "Channel",
+      "type": "actionCenter",
+      "inputSchema": { "type": "object", "properties": { "Content": { "type": "string" } } },
+      "outputSchema": { "type": "object", "properties": { "Comment": { "type": "string" } } },
+      "outcomeMapping": { "approve": "continue", "reject": "continue" },
+      "recipients": [{ "type": 1, "value": "user-or-group-id", "displayName": "Review Team" }],
+      "properties": {
+        "appName": "HITL App",
+        "appVersion": 1,
+        "resourceKey": "app-resource-uuid",
+        "isActionableMessageEnabled": false
+      }
     }
   ]
 }

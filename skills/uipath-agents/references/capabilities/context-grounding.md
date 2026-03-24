@@ -151,18 +151,22 @@ tools = [search_company_docs]
 
 ### Low-Code Configuration
 
-For low-code agents, add a context resource to `agent.json`:
+For low-code agents, add a context resource to the `resources` array in `agent.json`. See [lowcode/resources-reference.md](../lowcode/resources-reference.md) for all options.
 
 ```json
 {
-  "resources": [
-    {
-      "type": "context",
-      "name": "company_docs",
-      "indexName": "company_docs",
-      "folderPath": "MyFolder"
-    }
-  ]
+  "$resourceType": "context",
+  "name": "Company Knowledge Base",
+  "description": "Search company documentation for relevant information.",
+  "contextType": "index",
+  "folderPath": "MyFolder",
+  "indexName": "company-docs-index",
+  "settings": {
+    "resultCount": 5,
+    "retrievalMode": "Semantic",
+    "threshold": 0.7,
+    "query": { "variant": "dynamic" }
+  }
 }
 ```
 

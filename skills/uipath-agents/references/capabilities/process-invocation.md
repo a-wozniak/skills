@@ -44,18 +44,25 @@ graph = builder.compile()
 
 ### Low-Code Configuration
 
-For low-code agents, add a tool resource to `agent.json`:
+For low-code agents, add a tool resource to the `resources` array in `agent.json`. See [lowcode/resources-reference.md](../lowcode/resources-reference.md) for all options.
 
 ```json
 {
-  "resources": [
-    {
-      "type": "tool",
-      "name": "MyProcess",
-      "processName": "MyProcess",
-      "processFolderPath": "MyFolderPath"
-    }
-  ]
+  "$resourceType": "tool",
+  "type": "Process",
+  "name": "MyProcess",
+  "description": "Runs the MyProcess RPA automation.",
+  "isEnabled": true,
+  "location": "solution",
+  "properties": {
+    "folderPath": "MyFolderPath",
+    "processName": "MyProcess"
+  },
+  "inputSchema": { "type": "object", "properties": { "param1": { "type": "string" } } },
+  "outputSchema": { "type": "object", "properties": { "result": { "type": "string" } } },
+  "settings": {},
+  "guardrail": { "policies": [] },
+  "argumentProperties": {}
 }
 ```
 
