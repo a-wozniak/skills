@@ -322,13 +322,16 @@ Provides the agent with read access to a knowledge source (document index, file 
 ```json
 {
   "$resourceType": "context",
-  "name":           "Product Knowledge Base",
-  "type":           "index",
-  "retrievalMode":  "Semantic",
-  "isEnabled":      true,
-  "properties": {
-    "indexId":   "<uuid>",
-    "indexName": "products-index"
+  "name": "Product Knowledge Base",
+  "description": "Search product documentation for relevant information.",
+  "contextType": "index",
+  "folderPath": "MyFolder",
+  "indexName": "products-index",
+  "settings": {
+    "resultCount": 5,
+    "retrievalMode": "Semantic",
+    "threshold": 0.7,
+    "query": { "variant": "dynamic" }
   }
 }
 ```
@@ -339,10 +342,13 @@ Provides the agent with read access to a knowledge source (document index, file 
 |---|---|---|---|
 | `$resourceType` | `"context"` | **Yes** | Discriminator. |
 | `name` | `string` | **Yes** | Display name for the knowledge source. |
-| `type` | `string` | **Yes** | Context subtype: `"index"`, `"attachments"`, or `"datafabricentityset"`. |
-| `retrievalMode` | `string` | No | How documents are retrieved (see [Retrieval Modes](#retrieval-modes)). |
-| `isEnabled` | `boolean` | **Yes** | Enables or disables this context source. |
-| `properties` | `object` | **Yes** | Source-specific connection properties. |
+| `contextType` | `string` | No | Context subtype: `"index"`, `"attachments"`, or `"datafabricentityset"`. |
+| `folderPath` | `string` | No | Orchestrator folder containing the index. |
+| `indexName` | `string` | No | Name of the Context Grounding index (when `contextType` is `"index"`). |
+| `settings.resultCount` | `integer` | No | Number of results to retrieve (default varies). |
+| `settings.retrievalMode` | `string` | No | How documents are retrieved (see [Retrieval Modes](#retrieval-modes)). |
+| `settings.threshold` | `float` | No | Minimum similarity score (0–1, default `0`). |
+| `settings.query.variant` | `string` | No | Query strategy. Use `"dynamic"` for agent-determined queries. |
 
 #### Retrieval Modes
 

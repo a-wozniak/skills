@@ -125,7 +125,7 @@ Determine coded vs low-code from context (see Agent Type Detection table above).
    uip codedagents run agent.json '{"task": "test"}'
    ```
 
-6. **Push** — Tell the user to go to Studio Web (`{UIPATH_URL without tenant}/studio_/projects`), create a new project (Coded Agent or Agent project), and paste the project ID. Add `UIPATH_PROJECT_ID=<id>` to `.env`, then run `uip codedagents push`.
+6. **Push** — Tell the user to open Studio Web in their browser at `https://cloud.uipath.com/{orgName}/studio_/projects`, create a new project (Coded Agent or Agent project), and paste the project ID. Add `UIPATH_PROJECT_ID=<id>` to `.env`, then run `uip codedagents push`.
 
 7. **Evaluate** — Create evaluator config and eval set, then run:
 

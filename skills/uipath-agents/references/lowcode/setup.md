@@ -9,14 +9,15 @@ This guide explains how to set up a UiPath low-code agent project for local deve
 Before you begin, ensure the following tools are installed:
 
 - **Python 3.11 or higher** — The agent runtime is Python-based even for low-code agents. Python must be available on your `PATH`.
-- **`uip` CLI** — The UiPath CLI used for pulling, running, evaluating, and publishing agents. Install or update it via:
+- **`uip` CLI** — The UiPath CLI used for pulling, running, evaluating, and publishing agents. Install it via npm:
   ```bash
-  pip install uipath --upgrade
+  npm install -g @uipath/cli
   ```
   Verify the installation:
   ```bash
   uip --version
   ```
+  > **Note:** The Python `uipath` package (the agent runtime) is **not** installed manually. It is installed automatically when you run `uip codedagents setup`.
 - **UiPath account credentials** — You need access to a UiPath Automation Cloud tenant. Authentication tokens are stored in `.env`.
 
 ---
@@ -34,7 +35,7 @@ Use this path when you have already designed an agent in **UiPath Studio Web Age
 3. In your terminal, create a local directory and pull the agent definition:
    ```bash
    mkdir my-agent && cd my-agent
-   uip pull
+   uip codedagents pull
    ```
    The CLI will prompt you to select the tenant, folder, and agent. It downloads `agent.json` and an optional `bindings.json` into the current directory.
 4. Verify the files were created:
@@ -44,7 +45,7 @@ Use this path when you have already designed an agent in **UiPath Studio Web Age
    # bindings.json   (if the agent has deployed resource bindings)
    ```
 
-> **Note:** `uipath pull` keeps your local `agent.json` in sync with Studio Web. Re-run it whenever the cloud definition changes.
+> **Note:** `uip codedagents pull` keeps your local `agent.json` in sync with Studio Web. Re-run it whenever the cloud definition changes.
 
 ---
 
@@ -130,7 +131,7 @@ uip codedagents setup
 
 Run this once per project (or after updating dependencies). It creates a `.venv` directory in your project folder with all necessary runtime packages.
 
-> You do **not** need to call `uip codedagents setup` merely to edit the agent definition or run evaluations — only when running the agent as a local server.
+> You do **not** need to call `uip codedagents setup` merely to edit `agent.json`. However, it **is** required before running the agent locally (`uip codedagents run`) or running evaluations (`uip codedagents eval`).
 
 ---
 
@@ -206,7 +207,7 @@ Create a `.env` file in the project root with the following variables:
 
 ```dotenv
 UIPATH_URL=https://cloud.uipath.com/{org}/{tenant}
-UIPATH_TOKEN=<your-personal-access-token>
+UIPATH_ACCESS_TOKEN=<your-personal-access-token>
 UIPATH_FOLDER_PATH=<your-orchestrator-folder>
 ```
 

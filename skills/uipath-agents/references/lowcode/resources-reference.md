@@ -285,11 +285,13 @@ Context resources provide the agent with **retrieval-augmented knowledge** — d
   "name": "Product Knowledge Base",
   "description": "Internal product documentation including feature specs, pricing, and FAQs. Query this whenever the user asks about product capabilities, limitations, or pricing.",
   "contextType": "index",
-  "indexId": "idx-f7a92b1c-3e44-4d58-a012-9c8b7f6e5d43",
+  "folderPath": "MyFolder",
+  "indexName": "product-docs-index",
   "settings": {
     "retrievalMode": "Semantic",
     "resultCount": 5,
-    "threshold": 0.75
+    "threshold": 0.75,
+    "query": { "variant": "dynamic" }
   }
 }
 ```
@@ -306,38 +308,62 @@ Escalation resources enable **Human-in-the-Loop (HITL)** workflows. When the age
 
 **Key fields:**
 
-| Field | Description |
-|---|---|
-| `channel.type` | Must be `"actionCenter"` |
-| `channel.recipients` | List of Orchestrator user emails or group names to notify |
-| `channel.title` | Title displayed in the Action Center task |
-| `outcomeMapping` | Maps human responses (e.g. `"approve"`, `"reject"`) to agent outcome labels |
-| `isAgentMemoryEnabled` | If `true`, the agent's conversation context is attached to the Action Center task so the reviewer has full context |
+| Field | Path | Description |
+|---|---|---|
+| `channels` | — | Array of channel objects (typically one). Each channel defines a separate escalation path. |
+| `channels[].type` | — | Must be `"actionCenter"` |
+| `channels[].inputSchema` | — | JSON Schema for data sent to the human reviewer |
+| `channels[].outputSchema` | — | JSON Schema for the reviewer's response |
+| `channels[].outcomeMapping` | — | Maps human choices (e.g. `"approve"`, `"reject"`) to agent actions (`"continue"`) |
+| `channels[].recipients` | — | Array of `{type, value, displayName}` objects. `type`: `1`=UserId, `2`=GroupId, `3`=UserEmail |
+| `channels[].properties` | — | Action Center app config: `appName`, `appVersion`, `resourceKey`, `isActionableMessageEnabled` |
+| `isAgentMemoryEnabled` | — | If `true`, resolved escalations are stored for future auto-resolution |
+| `escalationType` | — | Set to `0` (default) |
 
 ```json
 {
   "$resourceType": "escalation",
   "name": "Manager Approval",
-  "description": "Escalates to a human manager when the requested action exceeds the agent's authorised scope, involves a value above $10,000, or when the agent confidence is low. The manager can approve, reject, or provide additional instructions.",
-  "channel": {
-    "type": "actionCenter",
-    "title": "Agent Escalation: Approval Required",
-    "recipients": [
-      "manager-group@company.com"
-    ],
-    "priority": "Medium",
-    "dueInHours": 24
-  },
-  "outcomeMapping": {
-    "approve": "Approved",
-    "reject": "Rejected",
-    "moreInfo": "MoreInformationRequired"
-  },
-  "isAgentMemoryEnabled": true
+  "description": "Escalates to a human manager for approval when the action exceeds the agent's scope.",
+  "escalationType": 0,
+  "isAgentMemoryEnabled": false,
+  "channels": [
+    {
+      "name": "Channel",
+      "type": "actionCenter",
+      "description": "Approval channel for high-value actions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "Content": { "type": "string" },
+          "Comment": { "type": "string", "description": "Reviewer comments" }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "Comment": { "type": "string", "description": "Reviewer response" }
+        }
+      },
+      "outcomeMapping": {
+        "approve": "continue",
+        "reject": "continue"
+      },
+      "recipients": [
+        { "type": 1, "value": "user-or-group-uuid", "displayName": "Review Team" }
+      ],
+      "properties": {
+        "appName": "HITL App",
+        "appVersion": 1,
+        "resourceKey": "action-center-app-uuid",
+        "isActionableMessageEnabled": false
+      }
+    }
+  ]
 }
 ```
 
-> **When to use `isAgentMemoryEnabled: true`:** Enable this when reviewers need the full conversation history to make an informed decision. Disable it for privacy-sensitive workflows where the reviewer should only see the escalation summary.
+> **When to use `isAgentMemoryEnabled: true`:** Enable this when the agent should learn from resolved escalations and auto-resolve similar cases in the future. Disable for privacy-sensitive workflows.
 
 ---
 
@@ -448,5 +474,5 @@ Resources are listed in the `"resources"` array. The agent's LLM uses the `descr
 ## See Also
 
 - [setup.md](./setup.md) — Project setup and directory structure
-- [agent-json-reference.md](../agent-json-reference.md) — Full `agent.json` schema reference
+- [agent-json-reference.md](./agent-json-reference.md) — Full `agent.json` schema reference
 - [../../assets/templates/agent.json](../../assets/templates/agent.json) — Minimal starter template
