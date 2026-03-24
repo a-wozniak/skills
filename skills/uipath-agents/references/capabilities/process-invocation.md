@@ -17,7 +17,7 @@ How to invoke external processes and monitor job execution in LangGraph agents u
 
 ```python
 from langgraph.graph import START, END, StateGraph, MessagesState
-from langgraph.types import Command
+from langgraph.types import Command, interrupt
 from uipath.platform.common import InvokeProcess
 
 class GraphState(MessagesState):

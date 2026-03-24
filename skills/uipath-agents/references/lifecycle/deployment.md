@@ -30,9 +30,7 @@ uip codedagents invoke <ENTRYPOINT> '{"query": "test"}'
 
 - Authentication configured — if not authenticated, use the [authentication reference](authentication.md) first
 - `entry-points.json` exists (run `uip codedagents init`)
-- `pyproject.toml` has `name`, `version`, `description`, `authors`
-
-> **Low-code agents:** No `pyproject.toml` required. The agent definition is in `agent.json`.
+- `pyproject.toml` has `name`, `version`, `description`, `authors` (**coded agents only** — low-code agents do not need this)
 
 ## Troubleshooting
 

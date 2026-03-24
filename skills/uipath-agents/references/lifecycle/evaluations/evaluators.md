@@ -166,7 +166,7 @@ Validates tool call outputs.
 **Eval criteria:**
 ```json
 "ToolCallOutputEvaluator": {
-  "toolOutputs": [{ "name": "get_temperature", "output": "{'temperature': 25.0, 'unit': 'fahrenheit'}" }]
+  "toolOutputs": [{ "name": "get_temperature", "output": "{\"temperature\": 25.0, \"unit\": \"fahrenheit\"}" }]
 }
 ```
 

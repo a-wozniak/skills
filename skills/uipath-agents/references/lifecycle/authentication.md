@@ -15,7 +15,7 @@ uip login --client-id ID --client-secret SECRET --base-url URL
 
 ## Documentation
 
-- **[Authentication Guide](authentication.md)** — Complete authentication setup
+- This file covers complete authentication setup.
   - Interactive OAuth flow (with tenant selection)
   - Unattended client credentials flow
   - Environment modes (--cloud, --staging, --alpha)

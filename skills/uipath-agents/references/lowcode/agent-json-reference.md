@@ -44,7 +44,7 @@ Every agent project has exactly one `agent.json` at its root.
 |---|---|---|---|
 | `id` | `string` (UUID) | No | Stable unique identifier for the agent. Omit when creating new files; UiPath Studio assigns it. |
 | `version` | `string` | **Yes** | Schema version. Use `"1.0.0"` (standard) or `"1.1.0"` (conversational / newer features). |
-| `name` | `string` | No | Human-readable display name. Defaults to the project folder name if omitted. |
+| `name` | `string` | Recommended | Human-readable display name shown in Studio Web and traces. Defaults to the project folder name if omitted. |
 | `metadata` | `object` | **Yes** | Runtime and storage metadata (see [Metadata](#metadata)). |
 | `messages` | `array` | **Yes** | Exactly two prompt messages: one `system` and one `user` (see [Messages](#messages)). |
 | `inputSchema` | `object` | **Yes** | JSON Schema describing the agent's input variables (see [Schemas](#inputschema-and-outputschema)). |
@@ -69,6 +69,8 @@ Every agent project has exactly one `agent.json` at its root.
 |---|---|---|---|
 | `storageVersion` | `string` | **Yes** | Internal storage format version used by UiPath Studio. Use `"44.0.0"` for current Studio Web projects (older projects may use `"31.0.0"`). |
 | `isConversational` | `boolean` | **Yes** | `true` for conversational agents (multi-turn dialogue); `false` for single-turn / task agents. Must be consistent with `settings.engine`. |
+| `targetRuntime` | `string` | No | Set to `"pythonAgent"` by Studio Web. Optional for hand-crafted files. |
+| `showProjectCreationExperience` | `boolean` | No | Studio Web UI hint. Optional; omit for hand-crafted files. |
 
 ---
 
@@ -125,6 +127,8 @@ The `messages` array must contain **exactly two** entries, in this order:
 ```
 
 > **Rule:** Every `{{variableName}}` in `content` must map to a `variable` token with `rawString: "input.<variableName>"`. Surrounding literal text becomes `simpleText` tokens. The concatenation of all `rawString` values (substituting variable names with their `{{}}` form) must reproduce `content` exactly.
+
+> **Studio Web convention:** Studio Web appends an empty trailing `{"type": "simpleText", "rawString": ""}` token to messages containing variables. This is harmless — include or omit it freely.
 
 ---
 
@@ -358,7 +362,7 @@ Provides the agent with read access to a knowledge source (document index, file 
 | `"Structured"` | Keyword / structured query. Best for exact lookups. |
 | `"DeepRAG"` | Multi-hop retrieval with reasoning. Best for complex questions. |
 | `"BatchTransform"` | Bulk document processing. |
-| `"DataFabric"` | Queries UiPath Data Fabric entity sets. |
+| `"DataFabric"` | Used when `contextType` is `"datafabricentityset"`. |
 
 ---
 
@@ -444,12 +448,20 @@ Connects the agent to an external Model Context Protocol (MCP) server, exposing 
 ```json
 {
   "$resourceType": "mcp",
-  "name":      "My MCP Server",
-  "isEnabled": true,
-  "properties": {
-    "serverUrl": "https://mcp.example.com",
-    "transport": "http"
-  }
+  "name":          "My MCP Server",
+  "description":   "Provides weather and location tools via MCP.",
+  "isEnabled":     true,
+  "folderPath":    "MyFolder",
+  "slug":          "my-mcp-server",
+  "availableTools": [
+    {
+      "name":        "get_weather",
+      "description": "Returns current weather for a location.",
+      "inputSchema":  { "type": "object", "properties": { "location": { "type": "string" } } },
+      "outputSchema": { "type": "object", "properties": { "temperature": { "type": "number" } } }
+    }
+  ],
+  "dynamicTools": "none"
 }
 ```
 
@@ -457,9 +469,12 @@ Connects the agent to an external Model Context Protocol (MCP) server, exposing 
 |---|---|---|
 | `$resourceType` | `"mcp"` | Discriminator. |
 | `name` | `string` | Display name for the MCP server. |
+| `description` | `string` | Human-readable description shown to the LLM. |
 | `isEnabled` | `boolean` | Enables or disables the MCP connection. |
-| `properties.serverUrl` | `string` | Base URL of the MCP server. |
-| `properties.transport` | `string` | Transport protocol: `"http"` or `"stdio"`. |
+| `folderPath` | `string` | Orchestrator folder containing the MCP server registration. |
+| `slug` | `string` | URL-safe identifier for the MCP server. |
+| `availableTools` | `array` | List of tools exposed by this MCP server. Each entry has `name`, `description`, `inputSchema`, and `outputSchema`. |
+| `dynamicTools` | `string` | Controls runtime tool discovery: `"none"` (static list only), `"schema"` (fetch schemas at runtime), `"all"` (discover all tools at runtime). |
 
 ---
 
@@ -469,24 +484,29 @@ Invokes another UiPath agent as a sub-agent (Agent-to-Agent). Use instead of `to
 
 ```json
 {
-  "$resourceType": "a2a",
-  "name":        "Summarizer Agent",
-  "isEnabled":   true,
-  "agentId":     "<target-agent-uuid>",
-  "inputSchema": {
-    "type": "object",
-    "properties": {
-      "text": { "type": "string" }
-    }
-  },
-  "outputSchema": {
-    "type": "object",
-    "properties": {
-      "summary": { "type": "string" }
-    }
-  }
+  "$resourceType":   "a2a",
+  "name":            "Summarizer Agent",
+  "description":     "Summarizes long documents into concise paragraphs.",
+  "isEnabled":       true,
+  "id":              "<target-agent-uuid>",
+  "slug":            "summarizer-agent",
+  "agentCardUrl":    "https://platform.uipath.com/agents/summarizer-agent/card",
+  "isActive":        true,
+  "cachedAgentCard": {}
 }
 ```
+
+| Field | Type | Description |
+|---|---|---|
+| `$resourceType` | `"a2a"` | Discriminator. |
+| `name` | `string` | Display name for the target agent. |
+| `description` | `string` | Human-readable description shown to the LLM. |
+| `isEnabled` | `boolean` | Enables or disables this A2A connection. |
+| `id` | `string` (UUID) | Stable identifier of the target agent. Omit when creating manually; Studio assigns it. |
+| `slug` | `string` | URL-safe identifier for the target agent. |
+| `agentCardUrl` | `string` | URL to the agent's A2A card descriptor (capabilities, schemas). |
+| `isActive` | `boolean` | Whether the target agent is currently active and reachable. |
+| `cachedAgentCard` | `object` | Cached copy of the agent card fetched from `agentCardUrl`. Use `{}` if not yet populated. |
 
 ---
 
@@ -550,6 +570,8 @@ Uses a platform-provided ML validator.
 | `selector` | `object` | **Yes** | Where to apply the guardrail — `scopes` array (see [Scopes](#scopes)). |
 | `validatorParameters` | `array` | No | Typed parameter objects that configure the validator (see [Validator Parameters](#validator-parameters)). |
 
+> **Additional fields from Studio Web:** Studio-generated guardrails may include `id` (UUID, auto-assigned), `description` (human-readable explanation), and `enabledForEvals` (boolean, default `true` — controls whether the guardrail runs during evaluations). These are optional when creating files manually.
+
 #### Validator Types
 
 | `validatorType` | Description |
@@ -570,7 +592,7 @@ Uses a platform-provided ML validator.
 | `$actionType` | Description | Extra fields |
 |---|---|---|
 | `"log"` | Record a log entry but allow execution to continue. | `severityLevel`: `"Info"`, `"Warning"`, or `"Error"`. |
-| `"block"` | Stop the agent run and return an error. | — |
+| `"block"` | Halts execution with an error. **Requires `"reason": "string"`.** | `reason`: string explaining why execution was blocked. |
 | `"filter"` | Remove or redact the offending content and continue. | — |
 | `"escalate"` | Route the event to an escalation channel. | `escalationName`: name of the escalation resource to invoke. |
 
@@ -849,6 +871,19 @@ An agent with an API tool, an Action Center escalation, and guardrails:
   ]
 }
 ```
+
+---
+
+## Studio Web Generated Fields
+
+When you pull an `agent.json` from Studio Web, it may contain additional fields not documented above:
+
+- **Escalation channels:** `id`, `description`, `inputSchemaDotnetTypeMapping`, `outputSchemaDotnetTypeMapping`, `actionableMessageMetaData`
+- **Escalation top-level:** `governanceProperties`, `properties`
+- **Tool resources:** `id`, `referenceKey`, `location`
+- **Top-level:** `projectId`, `type: "lowCode"`
+
+These fields are auto-assigned by Studio Web. They are **not required** when creating `agent.json` manually — the runtime fills in defaults where needed. Do not fabricate UUIDs for `id` or `referenceKey` fields; omit them instead.
 
 ---
 
