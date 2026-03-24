@@ -1,5 +1,7 @@
 # UiPath SDK Services Reference
 
+> **Note:** This reference covers the Python SDK API. Low-code agents configure platform services declaratively in `agent.json` resources — see [lowcode/resources-reference.md](../lowcode/resources-reference.md).
+
 Complete reference for all platform services available through the UiPath Python SDK.
 
 ## SDK Initialization

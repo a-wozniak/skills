@@ -180,6 +180,8 @@ uip codedagents push --overwrite
 uip codedagents push --nolock
 ```
 
+> **Low-code agents:** The `--nolock` flag is not relevant (no `uv.lock` file).
+
 **Push without syncing resources:**
 ```bash
 uip codedagents push --ignore-resources
@@ -318,6 +320,8 @@ uip codedagents push
 | `main.py` | Main agent/project code |
 | `uv.lock` | Dependency lock file (can skip with `--nolock`) |
 | `.py`, `.json`, `.yaml` files | Project source files |
+
+> **Low-code agents:** The primary file synced is `agent.json`. No `pyproject.toml`, `main.py`, or `uv.lock` files are involved.
 
 ### Files Excluded from Sync
 

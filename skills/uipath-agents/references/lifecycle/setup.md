@@ -1,5 +1,7 @@
 # Setup UiPath Agent Project
 
+> **Note:** This guide covers coded (Python) agent setup. For low-code agent setup, see [lowcode/setup.md](../lowcode/setup.md).
+
 Scaffold a new project or initialize an existing one for UiPath agent development.
 
 ## Quick Reference

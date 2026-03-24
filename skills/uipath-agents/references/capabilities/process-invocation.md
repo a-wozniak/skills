@@ -42,6 +42,23 @@ builder.add_edge("invoke", END)
 graph = builder.compile()
 ```
 
+### Low-Code Configuration
+
+For low-code agents, add a tool resource to `agent.json`:
+
+```json
+{
+  "resources": [
+    {
+      "type": "tool",
+      "name": "MyProcess",
+      "processName": "MyProcess",
+      "processFolderPath": "MyFolderPath"
+    }
+  ]
+}
+```
+
 ### Parameters
 
 ```python

@@ -26,6 +26,9 @@ uip codedagents eval <ENTRYPOINT> evaluations/eval-sets/smoke-test.json --no-rep
 
 # Report results to Studio Web (requires auth + UIPATH_PROJECT_ID)
 uip codedagents eval <ENTRYPOINT> evaluations/eval-sets/smoke-test.json --report --workers 4
+
+# Low-code agent
+uip codedagents eval agent.json evaluations/eval-sets/smoke-test.json
 ```
 
 ## Documentation
@@ -64,6 +67,8 @@ Example `evaluations/evaluators/llm-judge-trajectory.json`:
 ```
 
 ## Mocking External Calls
+
+> **Note:** `@mockable()` is only available for coded (Python) agents.
 
 Apply `@mockable()` to functions that call external services:
 

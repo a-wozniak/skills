@@ -149,6 +149,23 @@ async def search_company_docs(query: str) -> str:
 tools = [search_company_docs]
 ```
 
+### Low-Code Configuration
+
+For low-code agents, add a context resource to `agent.json`:
+
+```json
+{
+  "resources": [
+    {
+      "type": "context",
+      "name": "company_docs",
+      "indexName": "company_docs",
+      "folderPath": "MyFolder"
+    }
+  ]
+}
+```
+
 ## Best Practices
 
 ### Document Preparation

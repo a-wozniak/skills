@@ -211,6 +211,13 @@ uip codedagents eval <agent> evaluations/eval-sets/smoke-tests.json \
   --output-file eval-results.json
 ```
 
+**Low-code agents:**
+```bash
+uip codedagents eval agent.json evaluations/eval-sets/smoke-tests.json \
+  --workers 4 \
+  --output-file eval-results.json
+```
+
 ## Evaluator Selection Quick Guide
 
 | Agent Type | Primary Evaluator | Secondary | Notes |

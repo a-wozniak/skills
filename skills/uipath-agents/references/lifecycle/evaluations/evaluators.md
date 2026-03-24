@@ -196,6 +196,8 @@ Validates tool call outputs.
 
 ## Custom Evaluators
 
+> **Note:** Custom Python evaluators are only available for coded agents.
+
 Create custom Python evaluators in `evaluations/custom_evaluators/`:
 
 ```python

@@ -13,6 +13,9 @@ uip codedagents run <ENTRYPOINT> --file input.json
 
 # Invoke published agent in cloud
 uip codedagents invoke <ENTRYPOINT> '{"query": "test"}'
+
+# Low-code agent
+uip codedagents run agent.json '{"task": "test"}'
 ```
 
 **IMPORTANT:** The entrypoint name comes from `entry-points.json` (e.g., `main`, `agent`). It is NOT the project or package name. Check `entry-points.json` for the correct name.
@@ -30,6 +33,8 @@ uip codedagents invoke <ENTRYPOINT> '{"query": "test"}'
 
 - `entry-points.json` must exist (run `uip codedagents init` if missing)
 - For `invoke`: agent must be published and auth configured
+
+> **Low-code agents:** No `entry-points.json` needed. The entrypoint is always `agent.json`.
 
 ## Troubleshooting
 

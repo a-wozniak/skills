@@ -87,6 +87,23 @@ from uipath.platform.common import WaitJob
 output = interrupt(WaitJob(job_id=background_job_id))
 ```
 
+### Low-Code Configuration
+
+For low-code agents, add an escalation resource to `agent.json`:
+
+```json
+{
+  "resources": [
+    {
+      "type": "escalation",
+      "name": "RequestReview",
+      "appName": "RequestReview",
+      "appFolderPath": "MyFolderPath"
+    }
+  ]
+}
+```
+
 ## Patterns
 
 ### Conditional Interrupt

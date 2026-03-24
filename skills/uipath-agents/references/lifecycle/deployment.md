@@ -32,6 +32,8 @@ uip codedagents invoke <ENTRYPOINT> '{"query": "test"}'
 - `entry-points.json` exists (run `uip codedagents init`)
 - `pyproject.toml` has `name`, `version`, `description`, `authors`
 
+> **Low-code agents:** No `pyproject.toml` required. The agent definition is in `agent.json`.
+
 ## Troubleshooting
 
 | Error | Cause | Solution |
@@ -62,6 +64,8 @@ uip codedagents init → uip codedagents run (test) → uip codedagents pack →
 ## Pack
 
 Package your project into a `.nupkg` file for deployment.
+
+> **Low-code agents:** The `pack` step is handled automatically by `deploy`. No `pyproject.toml` version bumping is needed.
 
 ```bash
 uip codedagents pack

@@ -18,6 +18,8 @@ Before creating evaluations, ensure your project has:
 
 If missing, create an agent first using `uip codedagents new` and `uip codedagents init`.
 
+> **Low-code agents:** No `entry-points.json` or `uipath.json` needed. The input schema comes from `agent.json`.
+
 ### Phase 2: Define Evaluation Details
 
 You'll be asked for:
@@ -138,6 +140,8 @@ Tests for invalid inputs and error handling:
 ## Mocking External Calls
 
 ### Function Mocking
+
+> **Note:** Mockito mocking strategy is only available for coded (Python) agents.
 
 Mock specific function calls with return values or exceptions:
 

@@ -1,5 +1,7 @@
 # Build UiPath Agents
 
+> **Note:** This guide covers coded (Python) agent build. For low-code agents, edit `agent.json` directly — see [lowcode/agent-json-reference.md](../lowcode/agent-json-reference.md).
+
 Implement agent logic using UiPath SDK and framework-specific patterns.
 
 ## Reference Lookup

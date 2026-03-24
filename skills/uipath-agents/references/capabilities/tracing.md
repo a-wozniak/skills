@@ -16,6 +16,8 @@ Trace data appears in:
 
 ## How Tracing Works
 
+> **Low-code agents:** Tracing is automatic. No `@traced()` decorator needed — all LLM calls, tool calls, and agent reasoning steps are traced by the runtime.
+
 The `@traced()` decorator automatically monitors your functions. Apply it to any function:
 
 ```python

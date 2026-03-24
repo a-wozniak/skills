@@ -118,6 +118,8 @@ uip codedagents --version
 
 If this command fails, you need to set up your project first. Ensure you have a `pyproject.toml` with UiPath SDK dependencies and run `uv sync` to install them.
 
+> **Low-code agents:** Skip the Python environment check. You still need `uip codedagents setup` for the runtime, but no `pyproject.toml` or `uv sync` is required.
+
 ## Environment Setup
 
 For **Automation Suite** (on-premise) deployments, set your instance URL:
