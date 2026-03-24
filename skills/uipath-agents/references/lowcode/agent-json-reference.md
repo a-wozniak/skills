@@ -60,14 +60,14 @@ Every agent project has exactly one `agent.json` at its root.
 
 ```json
 "metadata": {
-  "storageVersion": "31.0.0",
+  "storageVersion": "44.0.0",
   "isConversational": false
 }
 ```
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `storageVersion` | `string` | **Yes** | Internal storage format version used by UiPath Studio. Use `"31.0.0"` unless you know a newer version applies. |
+| `storageVersion` | `string` | **Yes** | Internal storage format version used by UiPath Studio. Use `"44.0.0"` for current Studio Web projects (older projects may use `"31.0.0"`). |
 | `isConversational` | `boolean` | **Yes** | `true` for conversational agents (multi-turn dialogue); `false` for single-turn / task agents. Must be consistent with `settings.engine`. |
 
 ---
@@ -619,7 +619,7 @@ A task agent with two numeric inputs and one numeric output, no resources, no gu
   "version": "1.0.0",
   "name": "Calculator Agent",
   "metadata": {
-    "storageVersion": "31.0.0",
+    "storageVersion": "44.0.0",
     "isConversational": false
   },
   "messages": [
@@ -868,7 +868,7 @@ Follow these rules when creating or editing `agent.json` files:
 
 9. **Do not generate `id`** when creating new files — UiPath Studio will assign it on first save.
 
-10. **`storageVersion`** should match the Studio version generating the file; default to `"31.0.0"` when unknown.
+10. **`storageVersion`** should match the Studio version generating the file; default to `"44.0.0"` for new agents.
 
 11. **Resource `name` fields are seen by the LLM** — use clear, verb-phrase names for tools (e.g., `"Get Customer Profile"`, `"Submit Order"`) so the model knows when to call them.
 

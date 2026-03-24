@@ -56,7 +56,7 @@ Use this path when you want to author a brand-new agent entirely in code without
    ```bash
    mkdir my-agent && cd my-agent
    ```
-2. Create `agent.json` manually. See the **Minimal Template** section below for a starting point, and consult [agent-json-reference.md](../agent-json-reference.md) for the full schema.
+2. Create `agent.json` manually. See the **Minimal Template** section below for a starting point, and consult [agent-json-reference.md](./agent-json-reference.md) for the full schema.
 3. Optionally create a `.env` file with your credentials (see **Authentication** below).
 
 ---
@@ -244,5 +244,5 @@ This packages and uploads the agent to your personal workspace, making it availa
 ## Next Steps
 
 - **Add tools and context:** See [resources-reference.md](./resources-reference.md) for all resource types.
-- **Full schema reference:** See [agent-json-reference.md](../agent-json-reference.md) for every field.
+- **Full schema reference:** See [agent-json-reference.md](./agent-json-reference.md) for every field.
 - **Starter template:** Copy [../../assets/templates/agent.json](../../assets/templates/agent.json) as a project starting point.
