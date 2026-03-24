@@ -15,3 +15,6 @@
 
 # Platform skill
 /skills/uipath-platform/ @gabrielavaduva
+
+# Agents skill (coded + low-code)
+/skills/uipath-agents/ @gabrielavaduva @AlvinStanescu
