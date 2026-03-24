@@ -619,7 +619,8 @@ Defines a rule using simple value comparisons (no ML model required).
   "name":           "Block empty output",
   "$guardrailType": "custom",
   "action": {
-    "$actionType": "block"
+    "$actionType": "block",
+    "reason": "Output must not be empty."
   },
   "selector": {
     "scopes": ["Agent"]
@@ -859,7 +860,8 @@ An agent with an API tool, an Action Center escalation, and guardrails:
       "$guardrailType": "builtInValidator",
       "validatorType":  "prompt_injection",
       "action": {
-        "$actionType":   "block"
+        "$actionType":   "block",
+        "reason": "Prompt injection detected."
       },
       "selector": {
         "scopes": ["Llm"]

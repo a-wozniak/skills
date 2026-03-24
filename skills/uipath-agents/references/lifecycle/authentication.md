@@ -41,7 +41,7 @@ uip login --client-id ID --client-secret SECRET --base-url URL
 
 ## Additional Instructions
 
-- If unsure about usage, read the [authentication reference](authentication.md) before making assumptions.
+- If unsure about usage, read the full authentication guide below before making assumptions.
 
 ---
 

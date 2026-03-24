@@ -105,7 +105,7 @@ The following is a minimal, working `agent.json` that you can copy and customise
   },
   "settings": {
     "engine": "basic-v2",
-    "model": "gpt-4o-2024-11-20",
+    "model": "gpt-4.1-2025-04-14",
     "maxTokens": 16384,
     "temperature": 0,
     "maxIterations": 25

@@ -416,16 +416,20 @@ A2A resources use the **Agent-to-Agent (A2A) protocol** to connect to agents hos
 
 | Field | Description |
 |---|---|
-| `slug` | Unique identifier for this A2A connection |
+| `id` | UUID identifier for this A2A resource |
+| `slug` | Unique string identifier for this A2A connection |
 | `agentCardUrl` | URL where the remote agent publishes its Agent Card (capability manifest) |
+| `isActive` | Whether this A2A connection is active (default `true`) |
 | `cachedAgentCard` | Inline copy of the Agent Card JSON, used when the remote URL is not accessible at design time or for performance |
 
 ```json
 {
   "$resourceType": "a2a",
+  "id": "a2a-resource-uuid",
   "slug": "legal-review-agent",
   "name": "Legal Review Agent",
   "description": "An external legal AI agent that reviews contract clauses for compliance risks and suggests redlines. Use this when the user submits a contract for review or when generated content includes legal commitments.",
+  "isActive": true,
   "agentCardUrl": "https://legal-ai.company.com/.well-known/agent.json",
   "cachedAgentCard": {
     "name": "Legal Review Agent",
