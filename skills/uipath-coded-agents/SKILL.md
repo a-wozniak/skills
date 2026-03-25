@@ -1,5 +1,5 @@
 ---
-name: uipath-agents
+name: uipath-coded-agents
 description: UiPath agent lifecycle assistant. Works with both coded agents (Python with LangGraph/LlamaIndex/OpenAI Agents) and low-code agents (agent.json from Agent Builder). Orchestrates setup, auth, build, run, evaluate, deploy, and sync. Use when the user wants to create, run, evaluate, or deploy a UiPath agent, e.g. "create a UiPath agent", "set up and deploy an agent", "edit my agent.json", or "build and run an agent end-to-end".
 allowed-tools: Bash, Read, Write, Glob, Grep, AskUserQuestion
 user-invocable: true
